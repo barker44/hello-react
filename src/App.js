@@ -1,5 +1,32 @@
 //import logo from './logo.svg';
+import {useState} from 'react';
+import {supabase} from './supabaseClient'
 import './App.css';
+
+function Library() {
+  const [myBooks, setMyBooks] = useState([]);
+  async function getBooks() {
+    let { data: Books, error } = await supabase
+      .from('Books')
+      .select('*')
+    setMyBooks(Books);
+  }
+  getBooks();
+  return (
+    <table className = "lib">
+    {
+      myBooks.map(b => (
+        <tr>
+          <td>{b.title}</td>
+          <td>{b.author}</td>
+          <td>{b.isbn}</td>
+          <td>{b.description}</td>
+        </tr>
+      ))
+    }
+    </table>
+  )
+}
 
 const snacks = [
   {id: 1, title: 'Fruit Snacks', isAvailable: true},
@@ -22,6 +49,8 @@ function SnackShelf() {
       <ul>{listSnacks}</ul>
     )
 }
+
+
 
 const cat = {
   title: 'Picture of Cat',
@@ -59,6 +88,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <Library />
         <SnackShelf />
         <Catdisplay />
         <MagicButton />
